@@ -4,7 +4,7 @@ A Go library for working with [Placekeys](https://www.placekey.io/). This is an 
 
 ## Status
 
-This library is mostly complete although feature exports for Polygon, GeoJSON and WKT are currently under development. An interface to the [Placekeys API](https://docs.placekey.io) may also be included.
+This library is mostly complete. Some geospatial features are currently under development. An interface to the [Placekeys API](https://docs.placekey.io) may also be included.
 
 ## Installation
 
