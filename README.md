@@ -30,4 +30,4 @@ go get -u github.com/engelsjk/placekey-go
 
 ### Dependencies
 
-* [uber/h3-go](github.com/uber/h3-go)
+* [uber/h3-go](https://github.com/uber/h3-go)
