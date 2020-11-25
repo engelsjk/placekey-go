@@ -8,13 +8,13 @@ This library is mostly complete. Some geospatial features are currently under de
 
 ## Installation
 
-```
+```bash
 go get -u github.com/engelsjk/placekey-go
 ```
 
 ## Usage
 
-```
+```bash
 > placekey.FromGeo(37.23712, -115.80187)
 @5ys-rsx-4jv
 
@@ -23,6 +23,9 @@ go get -u github.com/engelsjk/placekey-go
 
 > placekey.Distance("@5ys-rsx-4jv", "@5yv-j8h-3nq")
 138681.552855
+
+> placekey.ToGeoJSON("@5yv-j8h-3nq")
+> placekey.ToWKT("@5yv-j8h-3nq")
 ```
 
 ### Dependencies
