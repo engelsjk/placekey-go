@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/paulmach/orb"
-	"github.com/paulmach/orb/geojson"
 	"github.com/uber/h3-go"
 )
 
@@ -268,25 +266,6 @@ func power64(base uint64, exponent int) uint64 {
 		return 1
 	}
 	return (base * power64(base, exponent-1))
-}
-
-///////////////////////////////////////////////////
-///////////////////////////////////////////////////
-
-func placekeyToGeoBoundary(placekey string) h3.GeoBoundary {
-	h3Int := ToH3Int(placekey)
-	return h3.ToGeoBoundary(h3.H3Index(h3Int))
-}
-func geoBoundaryToPolygon(gb h3.GeoBoundary) orb.Polygon {
-	return orb.Polygon{}
-}
-
-func geoBoundaryToGeoJSON(gb h3.GeoBoundary) *geojson.Feature {
-	return nil
-}
-
-func geoBoundaryToWKT(gb h3.GeoBoundary) string {
-	return ""
 }
 
 ///////////////////////////////////////////////////
