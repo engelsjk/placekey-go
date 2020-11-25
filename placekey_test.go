@@ -1,4 +1,4 @@
-package placekey
+package main
 
 import (
 	"math"
