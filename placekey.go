@@ -7,6 +7,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/paulmach/orb"
+	"github.com/paulmach/orb/encoding/wkt"
+	"github.com/paulmach/orb/geojson"
 	"github.com/uber/h3-go"
 )
 
@@ -119,15 +122,52 @@ func ToH3Int(placekey string) uint64 {
 	return decodeToH3Int(where)
 }
 
-// todo: ToHexBoundary
-// todo: ToPolygon
-// todo: ToWKT
-// todo: ToGeojson
-// todo: FromPolygon
+// ToHexBoundary returns the Polygon boundary of a Placekey as a slice of (latitude, longitude) coordinates.
+func ToHexBoundary(placekey string) [][]float64 {
+	hexBoundary := [][]float64{}
+	boundary := h3.ToGeoBoundary(h3.H3Index(ToH3Int(placekey)))
+	for _, c := range boundary {
+		hexBoundary = append(hexBoundary, []float64{c.Latitude, c.Longitude})
+	}
+	return hexBoundary
+}
+
+// ToPolygon returns the Polygon boundary of a Placekey as an orb.Polygon.
+func ToPolygon(placekey string) orb.Polygon {
+	boundary := h3.ToGeoBoundary(h3.H3Index(ToH3Int(placekey)))
+	return h3GeoCoordsToOrbPolygon(boundary)
+}
+
+// ToGeoJSON returns the Polygon boundary of a Placekey as a GeoJSON Feature string.
+func ToGeoJSON(placekey string) string {
+	feature := geojson.NewFeature(ToPolygon(placekey))
+	b, _ := feature.MarshalJSON()
+	return string(b)
+}
+
+// ToWKT returns the Polygon boundary of a Placekey as a Well-Known Text (WKT) string.
+func ToWKT(placekey string) string {
+	return wkt.MarshalString(ToPolygon(placekey))
+}
+
+// // FromPolygon
+// func FromPolygon(p orb.Polygon) {
+// 	// todo: buffer polygon?
+// 	interiorHexes = []
+//     boundaryHexes = []
+// 	candidateHexes := h3.Polyfill(orbPolygonToH3GeoPolygon(p), 10)
+// 	for _, h := range candidateHexes {
+// 		boundary := h3.ToGeoBoundary(h3.H3Index(h))
+// 		hexPoly := h3GeoCoordsToOrbPolygon(boundary)
+// 		// check for contains / intersects
+// 	}
+// 	// ... work in progress!
+// }
+
 // todo: FromWKT
 // todo: FromGeoJSON
 
-// FormatIsValid returns a oolean for whether or not the format of a Placekey is valid, including
+// FormatIsValid returns a boolean for whether or not the format of a Placekey is valid, including
 // checks for valid encoding of location.
 func FormatIsValid(placekey string) bool {
 	what, where := parsePlacekey(placekey)
@@ -277,4 +317,43 @@ func rad(d float64) float64 {
 
 func deg(r float64) float64 {
 	return r / math.Pi * 180
+}
+
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+
+func h3GeoCoordsToOrbPolygon(gc []h3.GeoCoord) orb.Polygon {
+	ring := orb.Ring{}
+	for _, c := range gc {
+		ring = append(ring, orb.Point{c.Longitude, c.Latitude})
+	}
+	ring = append(ring, orb.Point{gc[0].Longitude, gc[0].Latitude})
+
+	// enforce right-hand rule that exterior rings must be counterclockwise
+	if ring.Orientation() == orb.CW {
+		ring.Reverse()
+	}
+	return orb.Polygon{ring}
+}
+
+func orbPolygonToH3GeoPolygon(p orb.Polygon) h3.GeoPolygon {
+
+	gc := []h3.GeoCoord{}
+
+	if len(p) == 0 {
+		return h3.GeoPolygon{}
+	}
+
+	if p[0].Orientation() == orb.CW {
+		p[0].Reverse()
+	}
+
+	for _, c := range p[0] {
+		gc = append(gc, h3.GeoCoord{Latitude: c[1], Longitude: c[0]})
+	}
+	return h3.GeoPolygon{Geofence: gc}
+}
+
+func h3GeoCoordsToH3GeoPolygon(gc []h3.GeoCoord) h3.GeoPolygon {
+	return h3.GeoPolygon{Geofence: gc}
 }
