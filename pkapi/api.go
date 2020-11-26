@@ -17,8 +17,7 @@ const (
 	libraryVersion = "0.0.1"
 	userAgent      = "placekey-go/" + libraryVersion
 
-	defaultBaseURL = "https://api.placekey.io/v1/placekey"
-	defaultBulkURL = "https://api.placekey.io/v1/placekeys"
+	defaultBaseURL = "https://api.placekey.io/"
 	mediaType      = "application/json"
 
 	headerRateLimitSecond     = "X-RateLimit-Limit-second"
@@ -145,12 +144,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 	}
 
 	defer func() {
-		// Ensure the response body is fully read and closed
-		// before we reconnect, so that we reuse the same TCPconnection.
-		// Close the previous response's body. But read at least some of
-		// the body so if it's small the underlying TCP connection will be
-		// re-used. No need to check for errors: if it fails, the Transport
-		// won't reuse it anyway.
 		const maxBodySlurpSize = 2 << 10
 		if resp.ContentLength == -1 || resp.ContentLength <= maxBodySlurpSize {
 			io.CopyN(ioutil.Discard, resp.Body, maxBodySlurpSize)

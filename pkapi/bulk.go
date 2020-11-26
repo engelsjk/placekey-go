@@ -1,4 +1,4 @@
-package api
+package pkapi
 
 import (
 	"context"
@@ -10,7 +10,7 @@ const (
 )
 
 type BulkService interface {
-	// ... list methods
+	Get(context.Context, *BulkRequest) (*Bulk, *Response, error)
 }
 
 type BulkServiceOp struct {
@@ -25,8 +25,8 @@ type BulkRequest struct {
 	Queries []Query `json:"queries"`
 }
 
-func (svc *BulkServiceOp) Get(ctx context.Context, query Query) (*Bulk, *Response, error) {
-	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, query)
+func (svc *BulkServiceOp) Get(ctx context.Context, request *BulkRequest) (*Bulk, *Response, error) {
+	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, request)
 	if err != nil {
 		return nil, nil, err
 	}

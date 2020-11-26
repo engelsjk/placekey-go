@@ -10,7 +10,7 @@ const (
 )
 
 type SingleLocationService interface {
-	// ... list methods
+	Get(context.Context, *SingleLocationRequest) (*SingleLocation, *Response, error)
 }
 
 type SingleLocationServiceOp struct {
@@ -25,28 +25,28 @@ type SingleLocation struct {
 }
 
 type SingleLocationRequest struct {
-	Query   Query   `json:"query"`
-	Options Options `json:"options"`
+	Query   Query    `json:"query"`
+	Options *Options `json:"options,omitempty"`
 }
 
 type Query struct {
-	QueryID        string  `json:"query_id"`
-	Latitude       float64 `json:"latitude"`
-	Longitude      float64 `json:"longitude"`
-	LocationName   string  `json:"location_name"`
-	StreetAddress  string  `json:"street_address"`
-	City           string  `json:"city"`
-	Region         string  `json:"region"`
-	PostalCode     string  `json:"postal_code"`
-	ISOCountryCode string  `json:"iso_country_code"`
+	QueryID        string  `json:"query_id,omitempty"`
+	Latitude       float64 `json:"latitude,omitempty"`
+	Longitude      float64 `json:"longitude,omitempty"`
+	LocationName   string  `json:"location_name,omitempty"`
+	StreetAddress  string  `json:"street_address,omitempty"`
+	City           string  `json:"city,omitempty"`
+	Region         string  `json:"region,omitempty"`
+	PostalCode     string  `json:"postal_code,omitempty"`
+	ISOCountryCode string  `json:"iso_country_code,omitempty"`
 }
 
 type Options struct {
-	StrictAddressMatch bool `json:"strict_address_match"`
+	StrictAddressMatch bool `json:"strict_address_match,omitempty"`
 }
 
-func (svc *SingleLocationServiceOp) Get(ctx context.Context, query Query) (*SingleLocation, *Response, error) {
-	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, query)
+func (svc *SingleLocationServiceOp) Get(ctx context.Context, request *SingleLocationRequest) (*SingleLocation, *Response, error) {
+	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, request)
 	if err != nil {
 		return nil, nil, err
 	}
