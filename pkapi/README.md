@@ -43,9 +43,11 @@ func main() {
   }
 
   fmt.Printf("rate: %+v\n", api.GetRate())
+  // Output:
   // rate: {LimitSec:100 RemainingSec:99 LimitMin:1000 RemainingMin:999}
 
   fmt.Printf("response: %s\n", string(b))
+  // Output:
   // response: {"query_id":"0","placekey":"@5vg-82n-kzz"}
 }
 
