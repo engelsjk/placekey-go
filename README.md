@@ -1,6 +1,6 @@
 # placekey-go
 
-A Go library for working with [Placekeys](https://www.placekey.io/). This is an **unofficial** port of the Python library [placekey-py](https://github.com/Placekey/placekey-py).
+A Go library for working with [Placekeys](https://www.placekey.io/). This is an unofficial port of the Python library [placekey-py](https://github.com/Placekey/placekey-py) and is not affiliated with the Placekey project.
 
 ## Status
 
