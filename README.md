@@ -18,7 +18,7 @@ This library depends on [uber/h3-go](https://github.com/uber/h3-go) and inherits
 
 #### [golang/cmd/go](https://golang.org/cmd/go/)
 
-```bash
+```go
 go get github.com/engelsjk/placekey-go
 ```
 
