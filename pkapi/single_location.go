@@ -43,6 +43,7 @@ type Query struct {
 
 type Options struct {
 	StrictAddressMatch bool `json:"strict_address_match,omitempty"`
+	StrictNameMatch    bool `json:"strict_name_match,omitempty"`
 }
 
 func (svc *SingleLocationServiceOp) Get(ctx context.Context, request *SingleLocationRequest) (*SingleLocation, *Response, error) {

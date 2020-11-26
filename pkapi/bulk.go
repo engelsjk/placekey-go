@@ -26,7 +26,7 @@ type BulkRequest struct {
 }
 
 func (svc *BulkServiceOp) Get(ctx context.Context, request *BulkRequest) (*Bulk, *Response, error) {
-	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, request)
+	req, err := svc.client.NewRequest(ctx, http.MethodPost, bulkPath, request)
 	if err != nil {
 		return nil, nil, err
 	}
