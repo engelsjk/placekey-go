@@ -46,6 +46,7 @@ type Options struct {
 	StrictNameMatch    bool `json:"strict_name_match,omitempty"`
 }
 
+// Get sends a Singe Location request to the Placekey API and returns a Placekey responses.
 func (svc *SingleLocationServiceOp) Get(ctx context.Context, request *SingleLocationRequest) (*SingleLocation, *Response, error) {
 	req, err := svc.client.NewRequest(ctx, http.MethodPost, singleLocationPath, request)
 	if err != nil {

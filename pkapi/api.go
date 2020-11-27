@@ -63,6 +63,7 @@ type Rate struct {
 	RemainingMin int `json:"remaining_minute"`
 }
 
+// NewClient returns a client with a user-defined API key.
 func NewClient(apiKey string) *Client {
 	httpClient := http.DefaultClient
 
@@ -76,6 +77,7 @@ func NewClient(apiKey string) *Client {
 
 // Options
 
+// NewRequest returns a new request with a defined context, HTTP method, URL path and body.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr string, body interface{}) (*http.Request, error) {
 	u, err := c.BaseURL.Parse(urlStr)
 	if err != nil {
@@ -102,10 +104,12 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr string, body int
 	return req, nil
 }
 
+// OnRequestCompleted updates the client's request completion callback.
 func (c *Client) OnRequestCompleted(rc RequestCompletionCallback) {
 	c.onRequestCompleted = rc
 }
 
+// GetRate returns a thread-safe Rate struct.
 func (c *Client) GetRate() Rate {
 	c.ratemtx.Lock()
 	defer c.ratemtx.Unlock()
@@ -134,6 +138,8 @@ func (r *Response) populateRate() {
 	}
 }
 
+// Do sends an HTTP request, checks the response and returns any errors.
+// It also updates the Rate struct in the client based on headers in the response.
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
 	resp, err := DoRequestWithClient(ctx, c.client, req)
 	if err != nil {
@@ -181,6 +187,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 	return response, err
 }
 
+// DoRequestWithClient ...
 func DoRequestWithClient(
 	ctx context.Context,
 	client *http.Client,
@@ -198,6 +205,7 @@ func (r *ErrorResponse) Error() string {
 		r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
 }
 
+// CheckResponse checks the HTTP response of a Placekey API request.
 func CheckResponse(r *http.Response) error {
 	if c := r.StatusCode; c >= 200 && c <= 299 {
 		return nil

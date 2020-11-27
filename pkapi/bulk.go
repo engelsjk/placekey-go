@@ -25,6 +25,7 @@ type BulkRequest struct {
 	Queries []Query `json:"queries"`
 }
 
+// Get sends a Bulk request to the Placekey API and returns a set of Placekey responses.
 func (svc *BulkServiceOp) Get(ctx context.Context, request *BulkRequest) (*Bulk, *Response, error) {
 	req, err := svc.client.NewRequest(ctx, http.MethodPost, bulkPath, request)
 	if err != nil {
